@@ -4,15 +4,19 @@ import (
 	"fmt"
 )
 
-func IsLuhnValid(num int) bool {
-	lastDigit := num % 10
+func IsLuhnValid(num int64) bool {
+	if num > 9999999999999999 {
+		return false
+	}
+
+	lastDigit := int(num % 10)
 	num /= 10
 	sum := 0
-	digit := 0x1
-	curr := 0
+	digit := 1
+	var curr int
 
 	for num > 1 {
-		curr = num % 10
+		curr = int(num % 10)
 		num /= 10
 
 		curr *= digit + 1

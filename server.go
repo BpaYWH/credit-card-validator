@@ -43,7 +43,7 @@ func getLuhn(writer http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(requestBody.CardNumber)
 
-	jsonResponse, err := json.Marshal(LuhnResponse{Valid: utils.IsLuhnValid(requestBody.CardNumber)})
+	jsonResponse, err := json.Marshal(LuhnResponse{Valid: utils.IsLuhnValid(int64(requestBody.CardNumber))})
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Write(jsonResponse)
