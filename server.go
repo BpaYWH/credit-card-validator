@@ -14,7 +14,8 @@ type RequestBody struct {
 }
 
 type LuhnResponse struct {
-	Valid bool `json:"valid"`
+	Valid    bool   `json:"valid"`
+	CardType string `json:"card-type"`
 }
 
 // Handler function
@@ -23,8 +24,8 @@ func getRoot(writer http.ResponseWriter, _ *http.Request) {
 	io.WriteString(writer, "This is my server")
 }
 
-func getLuhn(writer http.ResponseWriter, req *http.Request) {
-	fmt.Println(("got /luhn request"))
+func getValidation(writer http.ResponseWriter, req *http.Request) {
+	fmt.Println(("got /validation request"))
 
 	body, err := ioutil.ReadAll(req.Body)
 
@@ -43,7 +44,14 @@ func getLuhn(writer http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(requestBody.CardNumber)
 
-	jsonResponse, err := json.Marshal(LuhnResponse{Valid: utils.IsLuhnValid(int64(requestBody.CardNumber))})
+	var jsonResponse []byte
+
+	isCardValid := utils.IsLuhnValid(int64(requestBody.CardNumber))
+	if isCardValid {
+		jsonResponse, err = json.Marshal(LuhnResponse{Valid: utils.IsLuhnValid(int64(requestBody.CardNumber)), CardType: utils.CheckIIN(int64(requestBody.CardNumber))})
+	} else {
+		jsonResponse, err = json.Marshal(LuhnResponse{Valid: utils.IsLuhnValid(int64(requestBody.CardNumber)), CardType: utils.CheckIIN(int64(-1))})
+	}
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Write(jsonResponse)

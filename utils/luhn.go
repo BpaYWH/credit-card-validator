@@ -1,18 +1,8 @@
 package utils
 
-import (
-	"fmt"
-)
-
 func IsLuhnValid(num int64) bool {
-	if num > 9999999999999999 {
-		return false
-	}
-
-	lastDigit := int(num % 10)
-	num /= 10
 	sum := 0
-	digit := 1
+	digit := 0
 	var curr int
 
 	for num > 1 {
@@ -30,13 +20,5 @@ func IsLuhnValid(num int64) bool {
 		}
 	}
 
-	return 10-sum%10 == lastDigit
-}
-
-func LuhnTest() {
-	// test cases for my Luhn Algoorithm
-	// True
-	fmt.Println(IsLuhnValid(79927398713))
-	// False
-	fmt.Println(IsLuhnValid(79927398714))
+	return sum%10 == 0
 }

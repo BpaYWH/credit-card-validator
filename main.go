@@ -10,7 +10,7 @@ import (
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", getRoot)
-	mux.HandleFunc("/luhn", getLuhn)
+	mux.HandleFunc("/validation", getValidation)
 
 	err := http.ListenAndServe(":3333", mux)
 
